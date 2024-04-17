@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="./static/cs.css">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous" />
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/20c5629a29.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=MuseoModerno:wght@300;500;600&display=swap">
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* To prevent horizontal scrolling */
+            background-color: #f3eeeee0;
+        }
+
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            margin-top: -20px;
+            margin-bottom: 20px;
+            /* Add margin to prevent overlap */
+        }
+
+        .left-container,
+        .right-container {
+            margin-top: -10px;
+           
+            text-align: center;            
+            
+        }
+
+        .right-container {
+            background-color: #ee97f8;
+            text-align: center;
+            margin-left: 6vw;
+            justify-content: center;
+            border-radius: 18px;
+        }
+
+        .input-container input[type="file"] {
+            display: none;
+            /* Hide the default file input */
+        }
+
+        #upload-button {
+            cursor: pointer;
+            width: 100%;
+            height: auto;
+            max-height: 300px;
+            /* Set constant height */
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        #uploaded-image {
+            max-width: 100%;
+            /* Make the image fill its container */
+            height: auto;
+            display: none;
+            /* Initially hide the uploaded image */
+        }
+
+        .result-container {
+            background-color: #fae3f4;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+            margin-top: 10vh;
+            margin-left: 10vw;
+            /* Add some margin between containers */
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        #result-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #result-list li {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        #result-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        #result-list li:hover {
+            background-color: #e9e9e9;
+        }
+
+        .search-dropdown {
+            margin-right: 5vw;
+            /* Adjust the margin as needed */
+        }
+        .img-fluid
+        {
+            height: 50vh; 
+            width: 40vw;
+        }
+
+        /* Adjustments for smaller screens */
+        @media (max-width: 768px) {
+            .container {
+                margin-top: 10vh;
+            }
+
+            .right-container,
+            .left-container {
+                margin-left: 0;
+                margin-right: 0;
+            }
+            .img-fluid
+            { 
+                width: 80vw;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light " style="background-color: rgb(208, 15, 202);">
+        <a class="navbar-brand food-munch-logo" href="#">
+            <p style="font-size: 34px; color:white; font-family: 'MuseoModerno', sans-serif;">
+                <span><i class="fa-solid fa-magnifying-glass-chart" style="margin-right: 1vw;"></i> InSight</span>
+            </p>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div id="navtools" class="navbar-nav ml-auto">
+                <a class="nav-link" style="font-weight: bold; font-size: 20px;margin-right: 2vw; color: #fff;"
+                    id="navitem1" href="/">Home</a>
+                <a class="nav-link" style="font-weight: bold; font-size: 20px;color: #fff;margin-right: 2vw; "
+                    id="navitem2" href="#">About</a>
+                <div class="nav-item dropdown search-dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                        style="font-weight: bold; font-size: 20px;color: #fff;">
+                        Search
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="/upload">Upload an Image</a>
+                        <a class="dropdown-item" href="/live">Upload a Live Item</a>
+                        <a class="dropdown-item" href="/search">Search by a Word</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row" style="display: flex;flex-direction: row;">
+
+            <div class="result-container col-lg-4 col-md-12" style=" margin:5%; text-align: center;">
+                <h1>Your Image</h1>
+                <img class="img-fluid"  src="{{ image_path }}" alt="Uploaded Image">
+            </div>
+            <div class="result-container col-lg-4 col-md-12" style="margin:5%;">
+                <h1 style="margin-bottom: 3vh; text-align: center;"> Know Your Objects :</h1>
+                <div>
+                    <ul>
+                        {% for object in res %}
+                        <li style="font-size: 24px; cursor: pointer;" class="object-name"
+                            data-toggle="modal" data-target="#result{{ loop.index }}">
+                            {{ object }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="padding-left: 2%; padding-right: 2%;">
+        <div class="row">
+            {% for result in object_results %}
+            <div class="modal fade" id="result{{ loop.index }}" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Object Insight</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <img src="{{ result.item_image }}" class="menu-item-image w-100" />
+                            <h1 class="menu-card-title"><b>{{ result.Name }}</b></h1>
+                            <p style="text-align: justify;margin: 2%;">{{ result.Description }}</p>
+                            <p><a href="{{ result['Detailed Description'] }}">Detailed Description
+                                    -></a></p>
+                            <h3>Nearby Stores:</h3>        
+                                    <p>
+                                        <ul>
+                                        {% for location in result.locations %}
+                                         <li>   {{ location }} </li><br>
+                                        {% endfor %}
+                                        </ul>
+                                    </p>
+                            <h3>Online Platforms:</h3>
+                            <ul>
+                                <li><a href="https://www.amazon.com/s?k={{result.Name}}">https://www.amazon.com/s?k={{result.Name}}</a></li>
+                                <li><a href="https://www.walmart.com/search/?query={{result.Name}}">https://www.walmart.com/search/?query={{result.Name}}</a></li>
+                                <li><a href="https://www.flipkart.com/search?q={{result.Name}}">https://www.flipkart.com/search?q={{result.Name}}</a></li>
+                                <li><a href="https://www.ebay.com/sch/i.html?_nkw={{result.Name}}">https://www.ebay.com/sch/i.html?_nkw={{result.Name}}</a></li>
+                            </ul>             
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</body>
+
+</html>

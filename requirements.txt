@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+pandas
+Jinja2==3.0.3
+fastapi-sqlalchemy
+python-multipart
+requests
+easyocr
+psycopg2
+google-generativeai
+google-cloud-vision
+python-dotenv
+IPython

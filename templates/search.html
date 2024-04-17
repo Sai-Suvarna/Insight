@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="./static/cs.css">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous" />
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/20c5629a29.js" crossorigin="anonymous"></script>
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+    integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=MuseoModerno:wght@300;500;600&display=swap">
+ <style>
+        body, html {
+            height: 100%;
+            background-color: #f3eeeee0;
+        }
+        
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            margin-top: -20px; /* Move containers up */
+        }
+        
+        .left-container, .right-container {
+            margin-top: -10px; /* Move containers up */
+            text-align: center;
+        }
+        
+        .right-container {
+            background-color: #ee97f8;
+            text-align: center;
+            margin-left: 6vw;
+            justify-content: center;
+            border-radius: 18px;  
+        }
+        
+        
+        .input-container input[type="file"] {
+            display: none; /* Hide the default file input */
+        }
+        
+        #upload-button {
+            cursor: pointer;
+            width: 100%;
+            height: auto;
+            max-height: 300px; /* Set constant height */
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        #uploaded-image {
+            max-width: 30%;
+            height: 20vh; /* Set constant height */
+            width: auto;
+            display: none; /* Initially hide the uploaded image */
+        }
+
+        .result-container {
+            height: 60vh;
+            background-color: #fae3f4;
+            width: 40vw;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        #result-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #result-list li {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        #result-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        #result-list li:hover {
+            background-color: #e9e9e9;
+        }
+        @media screen and (max-width: 768px) { /* Adjust the max-width to match your desired breakpoint */
+    .row > div {
+        width: 90%;
+    }
+}
+.search-dropdown {
+    margin-right: 5vw; /* Adjust the margin as needed */
+}
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgb(208, 15, 202);">
+        <a class="navbar-brand food-munch-logo" href="#">
+            <p style="font-size: 34px; color:white; font-family: 'MuseoModerno', sans-serif;">
+                <span><i class="fa-solid fa-magnifying-glass-chart" style="margin-right: 1vw;"></i> InSight</span>
+            </p>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div id="navtools" class="navbar-nav ml-auto">
+                <a class="nav-link" style="font-weight: bold; font-size: 20px;margin-right: 2vw; color: #fff;" id="navitem1" href="/">Home</a>
+                <a class="nav-link" style="font-weight: bold; font-size: 20px;color: #fff;margin-right: 2vw; "  id="navitem2" href="#">About</a>
+                <div class="nav-item dropdown search-dropdown"> 
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-weight: bold; font-size: 20px;color: #fff;">
+                        Search
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="/upload">Upload an Image</a>
+                        <a class="dropdown-item" href="/live">Upload a Live Item</a>
+                        <a class="dropdown-item" href="/search">Search by a Word</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div style="padding-top:1%;padding-bottom: 1%;margin-left: 30vw; text-align: center; width: 40vw;border-radius: 18px;">
+    <h1 >Search By Word</h1>
+    <form  id="searchForm" action="/search_objects" method="post" enctype="multipart/form-data">
+        <input style="border: 2px solid black; margin: 2%; font-size: 18px; border-radius: 10px; height: 6vh; width: 35vw;" type="text" id="searchInput" name="search_word" placeholder="Enter an object name">
+        <button class="custom-button" style="color:white ;background-color: #9708b7;" type="submit">Search</button>
+    </form>
+    </div>
+
+
+
+    {% if object_results %}
+    <h1 style="margin-bottom: 3vh; margin-left: 2vw;margin-top: 3vh;">Object Insights:</h1>
+    <div style="padding-left: 2%; padding-right: 2%; text-align: center;">
+        <div class="row" style="display: flex; flex-direction: row; justify-content: center;">
+            {% for result in object_results %}
+                <div style="width: 38vw; height: 42vh;">
+                    <div class="shadow menu-item-card" style="padding: 8px; padding-top: 16px;">
+                        <img src="{{ result.item_image }}" style="width: 30vw; height: 30vh;" />
+                        <h1 class="menu-card-title"><b>{{ result.Name }}</b></h1>
+                        <p style="text-align: justify;margin: 2%;">{{ result.Description }}</p>
+                        <p><a href="{{ result['Detailed Description'] }}">Detailed Description -></a></p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+
+
+
+    
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js" integrity="sha384-GVjR/gg+8sv7J5qLgEVSvL15B/1+/txcP7q2c4FrxHfORgvbX+YK3p2MvEQh27I5" crossorigin="anonymous"></script>
+   
+</body>
+</html>

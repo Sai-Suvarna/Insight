@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Object Detection Website</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Other CSS Styles -->
+    <link rel="stylesheet" href="./static/cs.css">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=MuseoModerno:wght@300;500;600&display=swap" rel="stylesheet">
+    <!-- BoxIcons CSS -->
+    <link href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css" rel="stylesheet">
+    <style>
+        /* Your Custom Styles */
+        .row
+        {
+            margin-top: 4vh;
+        }
+
+        @media (min-width: 992px) {
+            .left-container img {
+                max-height: 70vh; /* Adjust to 70% of viewport height */
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgb(208, 15, 202);">
+        <a class="navbar-brand" href="#">
+            <p style="font-size: 34px; color:white; font-family: 'MuseoModerno', sans-serif;">
+                <span><i class="fa-solid fa-magnifying-glass-chart" style="margin-right: 1vw;"></i> InSight</span>
+            </p>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav ml-auto">
+                <a class="nav-link" style="font-weight: bold; font-size: 20px;margin-right: 2vw; color: #fff;" href="/">Home</a>
+                <a class="nav-link" style="font-weight: bold; font-size: 20px;color: #fff;margin-right: 2vw; "  href="#">About</a>
+                <div class="nav-item dropdown search-dropdown"> 
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-weight: bold; font-size: 20px;color: #fff;">
+                        Search
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="/upload">Upload an Image</a>
+                        <a class="dropdown-item" href="/live">Upload a Live Item</a>
+                        <a class="dropdown-item" href="/search">Search by a Word</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <div class="left-container text-center">
+                    <h2>Welcome to Our Object Detection Website</h2>
+                    <img src="./static/4537623.jpg" style="max-width: 100%; height: auto;" alt="Object Detection Image">
+                </div>
+            </div>
+            <div class="d-flex flex-column justify-content-center col-lg-5 col-md-6 col-sm-12 mt-4 mt-md-0">
+                <div class="right-container text-center p-4" style="background-color: rgba(230, 38, 224, 0.853); border-radius: 40px;">
+                    <form action="/upload_image" method="post" enctype="multipart/form-data" id="uploadForm">
+                        <div class="img-area mb-3" style="background-color: #ddd;">
+                            <i class='bx bxs-cloud-upload icon'></i>
+                            <h3>Upload Image</h3>
+                            <p style="color: black;">Image size must be less than <span>2MB</span></p>
+                        </div>
+                        <div class="align-items-center">
+                            <input class="select-image mb-3" type="file" name="image_file" accept="image/*" required id="imageFileInput">
+                            <input type="hidden" name="latitude" id="latitude">
+                            <input type="hidden" name="longitude" id="longitude">
+                            <button class="custom-button" style="background-color: #9708b7;" type="submit">Upload Image</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById("imageFileInput").addEventListener("change", function(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const imgArea = document.querySelector(".img-area");
+                imgArea.innerHTML = '';
+
+                const img = document.createElement("img");
+                img.src = e.target.result;
+                img.style.maxWidth = "100%";
+                img.style.maxHeight = "100%";
+                imgArea.appendChild(img);
+            };
+
+            reader.readAsDataURL(file);
+        });
+
+        function getCurrentLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var currentLat = position.coords.latitude;
+                    var currentLng = position.coords.longitude;
+                    console.log("Current Latitude: " + currentLat);
+                    console.log("Current Longitude: " + currentLng);
+                    // Update hidden input fields with latitude and longitude
+                    document.getElementById("latitude").value = currentLat;
+                    document.getElementById("longitude").value = currentLng;
+                }, function(error) {
+                    console.error("Error getting current location: " + error.message);
+                });
+            } else {
+                console.error("Geolocation is not supported by this browser.");
+            }
+        }
+
+        // Call getCurrentLocation function when the page loads
+        getCurrentLocation();
+    </script>
+</body>
+</html>
