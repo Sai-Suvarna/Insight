@@ -144,6 +144,8 @@
     <div style="padding-top:1%;padding-bottom: 1%;margin-left: 30vw; text-align: center; width: 40vw;border-radius: 18px;">
     <h1 >Search By Word</h1>
     <form  id="searchForm" action="/search_objects" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="latitude" id="latitude">
+        <input type="hidden" name="longitude" id="longitude">
         <input style="border: 2px solid black; margin: 2%; font-size: 18px; border-radius: 10px; height: 6vh; width: 35vw;" type="text" id="searchInput" name="search_word" placeholder="Enter an object name">
         <button class="custom-button" style="color:white ;background-color: #9708b7;" type="submit">Search</button>
     </form>
@@ -156,16 +158,38 @@
     <div style="padding-left: 2%; padding-right: 2%; text-align: center;">
         <div class="row" style="display: flex; flex-direction: row; justify-content: center;">
             {% for result in object_results %}
-                <div style="width: 38vw; height: 42vh;">
+                <div style="width: 38vw;">
                     <div class="shadow menu-item-card" style="padding: 8px; padding-top: 16px;">
                         <img src="{{ result.item_image }}" style="width: 30vw; height: 30vh;" />
                         <h1 class="menu-card-title"><b>{{ result.Name }}</b></h1>
                         <p style="text-align: justify;margin: 2%;">{{ result.Description }}</p>
+                        <div style="align-items: flex-start;">
                         <p><a href="{{ result['Detailed Description'] }}">Detailed Description -></a></p>
+                        
+                        <h3>Nearby Stores:</h3>        
+                        <p>
+                        <ul>
+                            {% for location in result.locations %}
+                               <li>   {{ location }} </li><br>
+                                {% endfor %}
+                                </ul>
+                       </p>
+                                            <h3>Online Platforms:</h3>
+                                            <ul>
+                                                <li><a href="https://www.amazon.com/s?k={{result.Name}}">https://www.amazon.com/s?k={{result.Name}}</a></li>
+                                                <li><a href="https://www.walmart.com/search/?query={{result.Name}}">https://www.walmart.com/search/?query={{result.Name}}</a></li>
+                                                <li><a href="https://www.flipkart.com/search?q={{result.Name}}">https://www.flipkart.com/search?q={{result.Name}}</a></li>
+                                                <li><a href="https://www.ebay.com/sch/i.html?_nkw={{result.Name}}">https://www.ebay.com/sch/i.html?_nkw={{result.Name}}</a></li>
+                                            </ul>
+                                        </div>                        
                     </div>
+                    
                 </div>
+               
+
             {% endfor %}
         </div>
+      
     </div>
 {% endif %}
 
@@ -175,5 +199,29 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js" integrity="sha384-GVjR/gg+8sv7J5qLgEVSvL15B/1+/txcP7q2c4FrxHfORgvbX+YK3p2MvEQh27I5" crossorigin="anonymous"></script>
    
+
+
+    <script>
+           function getCurrentLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var currentLat = position.coords.latitude;
+                    var currentLng = position.coords.longitude;
+                    console.log("Current Latitude: " + currentLat);
+                    console.log("Current Longitude: " + currentLng);
+                    // Update hidden input fields with latitude and longitude
+                    document.getElementById("latitude").value = currentLat;
+                    document.getElementById("longitude").value = currentLng;
+                }, function(error) {
+                    console.error("Error getting current location: " + error.message);
+                });
+            } else {
+                console.error("Geolocation is not supported by this browser.");
+            }
+        }
+
+        // Call getCurrentLocation function when the page loads
+        getCurrentLocation();
+    </script>
 </body>
 </html>

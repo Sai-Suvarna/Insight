@@ -119,8 +119,10 @@
         </div>
     </div>
 
-    <form id="imageForm" enctype="multipart/form-data" style="display: none;">
+    <form id="imageForm" enctype="multipart/form-data" method="post" style="display: none;">
         <input type="file" id="imageInput" name="image_file">
+        <input type="hidden" name="latitude" id="latitude">
+        <input type="hidden" name="longitude" id="longitude">
     </form>
 
     <script>
@@ -148,6 +150,11 @@
 
             snapButton.addEventListener('click', () => {
                 // Get the context of the canvas
+
+                // Get the latitude and longitude values
+            const latitude = document.getElementById("latitude").value;
+            const longitude = document.getElementById("longitude").value;
+            
                 const context = canvas.getContext('2d');
                 context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
@@ -159,6 +166,10 @@
 
                 // Create a FormData object
                 const formData = new FormData();
+
+                // Append the latitude and longitude values to the FormData
+            formData.append('latitude', latitude);
+            formData.append('longitude', longitude);
 
                 // Append the Blob as an UploadFile to the FormData
                 formData.append('image_file', blob, 'snapshot.png');
@@ -216,6 +227,27 @@
                 return new Blob(byteArrays, { type: 'image/png' });
             }
         });
+
+        function getCurrentLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var currentLat = position.coords.latitude;
+                    var currentLng = position.coords.longitude;
+                    console.log("Current Latitude: " + currentLat);
+                    console.log("Current Longitude: " + currentLng);
+                    // Update hidden input fields with latitude and longitude
+                    document.getElementById("latitude").value = currentLat;
+                    document.getElementById("longitude").value = currentLng;
+                }, function(error) {
+                    console.error("Error getting current location: " + error.message);
+                });
+            } else {
+                console.error("Geolocation is not supported by this browser.");
+            }
+        }
+
+        // Call getCurrentLocation function when the page loads
+        getCurrentLocation();
     </script>
 </body>
 

@@ -81,7 +81,7 @@ def live(request: Request):
 
 
 def get_nearby_stores(location, object_name, radius=1000):
-        api_key = 'AIzaSyB8zWPtv1G6B05tim27903BAeUQXjGS9dc'  # Replace with your Google Maps API key
+        api_key = 'AIzaSyD1ZOf60BMVT3aDDbjggkroH1J-cpucAzY'  # Replace with your Google Maps API key
         url = f'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={location}&radius={radius}&keyword={object_name}&key={api_key}'
         response = requests.get(url)
         data = response.json()
@@ -163,14 +163,12 @@ def display_knowledge_graph_data(data, query,upimage,location):
 
 
 
-def display_knowledge_graph_data1(data, query):
+def display_knowledge_graph_data1(data, query,location):
     results = []
     unique_names = set() 
     
 
    
-    location = f'{latitude},{longitude}'
-
     if "itemListElement" in data:
         for item in data["itemListElement"]:
             name = item["result"]["name"]
@@ -250,12 +248,13 @@ async def upload_image( request: Request,image_file: UploadFile = File(...),lati
 
 
 @app.post("/search_objects", response_class=HTMLResponse)
-async def search_objects(request: Request, search_word: str = Form(...)):
+async def search_objects(request: Request, search_word: str = Form(...),latitude: float = Form(...), longitude: float = Form(...)):
     
+    location = f'{latitude},{longitude}'
    
     object_results = []
     data = fetch_from_knowledge_graph(search_word)
-    object_data = display_knowledge_graph_data1(data, search_word)
+    object_data = display_knowledge_graph_data1(data, search_word,location)
     
     object_results.extend(object_data)
     
@@ -273,8 +272,9 @@ async def search_objects(request: Request, search_word: str = Form(...)):
 
 
 @app.post("/submit_snapshot", response_class=HTMLResponse)
-async def save_snapshot(request: Request, image_file: UploadFile = File(...)):
+async def save_snapshot(request: Request, image_file: UploadFile = File(...),latitude: float = Form(...), longitude: float = Form(...)):
         # Define the path where you want to save the image
+        
         static_folder = "static"  # Or any other folder where you want to save the images
         image_path = os.path.join(static_folder, image_file.filename)
         print(image_path)
@@ -283,7 +283,7 @@ async def save_snapshot(request: Request, image_file: UploadFile = File(...)):
             content = await image_file.read()
             img.write(content)
         
-        
+        location = f'{latitude},{longitude}'
         img = PIL.Image.open(image_path)
 
         # Assuming model.generate_content() is an asynchronous operation
@@ -296,7 +296,7 @@ async def save_snapshot(request: Request, image_file: UploadFile = File(...)):
         object_results = []
         for obj in res:
             data = fetch_from_knowledge_graph(obj)
-            object_data = display_knowledge_graph_data(data, obj, image_path)  # Assuming save_path is defined somewhere
+            object_data = display_knowledge_graph_data(data, obj, image_path, location)  # Assuming save_path is defined somewhere
             object_results.extend(object_data)
         
         
