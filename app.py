@@ -89,7 +89,7 @@ def get_nearby_stores(location, object_name, radius=1000):
 
 
 def fetch_from_knowledge_graph(query):
-    api_key = "AIzaSyBHQghHp4b6DdrlAftGluFOe6a6WQQpAn0"  # Replace with your actual API key
+    api_key = "AIzaSyCKYSFebYa9G2PNzxigUMQ-94fF7yrx440"  # Replace with your actual API key
     api_endpoint = "https://kgsearch.googleapis.com/v1/entities:search"
     params = {
         "query": query,
