@@ -5,8 +5,7 @@ Jinja2==3.0.3
 fastapi-sqlalchemy
 python-multipart
 requests
-easyocr
-psycopg2
+pillow
 google-generativeai
 google-cloud-vision
 python-dotenv

@@ -5,7 +5,6 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from fastapi.responses import JSONResponse
-import cv2
 import pickle
 import numpy as np
 import os
@@ -13,8 +12,6 @@ import requests
 import subprocess
 import shutil
 from fastapi.responses import RedirectResponse
-import easyocr
-import psycopg2
 import os
 from dotenv import load_dotenv
 import pathlib
@@ -205,7 +202,7 @@ def display_knowledge_graph_data1(data, query,location):
 
 
 
-@app.post("/upload_image", response_class=HTMLResponse)
+@app.post("/upload_image", response_class=JSONResponse)
 async def upload_image( request: Request,image_file: UploadFile = File(...),latitude: float = Form(...), longitude: float = Form(...) ):
     image_path = f"{UPLOAD_FOLDER}/{image_file.filename}"
     save_path = os.path.join(UPLOAD_FOLDER, image_file.filename)
@@ -234,20 +231,15 @@ async def upload_image( request: Request,image_file: UploadFile = File(...),lati
     print(object_results)
 
     
-    context = {
-        "request": request,
-        "res":res,
-        "object_results":object_results,
+    return {
+        "res": res,
+        "object_results": object_results,
         "image_path": image_path
-        
     }
 
 
-    return templates.TemplateResponse("result.html", context)
 
-
-
-@app.post("/search_objects", response_class=HTMLResponse)
+@app.post("/search_objects", response_class=JSONResponse)
 async def search_objects(request: Request, search_word: str = Form(...),latitude: float = Form(...), longitude: float = Form(...)):
     
     location = f'{latitude},{longitude}'
@@ -261,17 +253,13 @@ async def search_objects(request: Request, search_word: str = Form(...),latitude
     print(object_results)
 
     
-    context = {
-        "request": request,
-        "object_results":object_results
+    return {
+        "object_results": object_results
     }
-    
-    return templates.TemplateResponse("search.html", context)
 
 
 
-
-@app.post("/submit_snapshot", response_class=HTMLResponse)
+@app.post("/submit_snapshot", response_class=JSONResponse)
 async def save_snapshot(request: Request, image_file: UploadFile = File(...),latitude: float = Form(...), longitude: float = Form(...)):
         # Define the path where you want to save the image
         
@@ -299,19 +287,17 @@ async def save_snapshot(request: Request, image_file: UploadFile = File(...),lat
             object_data = display_knowledge_graph_data(data, obj, image_path, location)  # Assuming save_path is defined somewhere
             object_results.extend(object_data)
         
-        
         context = {
-            "request": request,
-            "res": res,
-            "object_results": object_results,
-            "image_path": image_path
+        "res": res,
+        "object_results": object_results,
+        "image_path": image_path
         }
-        
+    
         print(context)
 
-        return templates.TemplateResponse("result.html", context)
-  
-    
+        return context
+
+        
 
 
 
